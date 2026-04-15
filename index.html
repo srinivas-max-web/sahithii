@@ -238,13 +238,11 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
             margin-bottom: 0.5rem; 
             border: 2px solid rgba(255,255,255,0.5);
-            width: 100%; /* Ensures they fill the card beautifully */
-            object-fit: cover; /* Prevents stretching */
+            width: 100%; 
+            object-fit: cover; 
         }
 
-        /* =========================================================
-           SPECIFIC IMAGE ASPECT RATIOS (Requested by User)
-           ========================================================= */
+        /* Specific Aspect Ratios */
         .img-main-modal { aspect-ratio: 3 / 4; }
         .img-photo-1 { aspect-ratio: 1080 / 928; }
         .img-photo-2 { aspect-ratio: 9 / 16; }
@@ -362,7 +360,7 @@
 
                 <div class="floating-tile" id="tile-2" onclick="openCard('card-letter')">
                     <span class="tile-icon">💌</span>
-                    <p class="tile-title">A  Note for You</p>
+                    <p class="tile-title">A Note for You</p>
                 </div>
 
                 <div class="floating-tile" id="tile-3" onclick="openCard('card-special')">
