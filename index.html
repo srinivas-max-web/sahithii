@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sahithii!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Base & Background --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #111; 
+            overflow-x: hidden; 
+            background-color: #2b2829; 
+            scroll-behavior: smooth;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('background.jpg'); 
+            background-size: cover; 
+            background-position: center center; 
+            background-repeat: no-repeat;
+            z-index: -2;
+        }
+
+        /* --- Page Layout Containers --- */
+        #page-1 {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; 
+            align-items: center;
+            padding-bottom: 12vh; 
+        }
+
+        #page-2 {
+            display: none; 
+            min-height: 100vh;
+            padding-top: 2rem;
+        }
+
+        /* --- Navigation Buttons --- */
+        .btn-page-nav {
+            background: rgba(255, 255, 255, 0.9);
+            color: #111;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 15px 45px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            letter-spacing: 1px;
+        }
+
+        .btn-page-nav:hover {
+            transform: scale(1.05);
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .back-btn-container {
+            width: 100%;
+            text-align: left;
+            padding-left: 20px;
+            margin-bottom: -1rem; 
+            position: relative;
+            z-index: 20;
+        }
+
+        .btn-back {
+            font-size: 1rem;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- Header Section --- */
+        .header {
+            text-align: center;
+            padding: 2rem 1rem 1rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            color: #1a1a1a;
+            margin: 0 0 10px 0;
+            line-height: 1.1;
+        }
+
+        .blended-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            font-style: italic;
+            color: rgba(20, 20, 20, 0.85); 
+            max-width: 550px;
+            margin: 1.5rem auto;
+            line-height: 1.6;
+            padding: 0 15px;
+        }
+
+        .main-photo-trigger {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%; 
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .main-photo-trigger:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- Vertical Dashboard --- */
+        .dashboard-container {
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            padding: 2rem 1rem 5rem 1rem;
+            gap: 2rem; 
+        }
+
+        /* --- THE CLEAR FLOATING TILES --- */
+        .floating-tile {
+            width: 85%;
+            max-width: 450px;
+            border: 2px solid rgba(255, 255, 255, 0.6); 
+            border-radius: 20px;
+            padding: 2.5rem 1.5rem; 
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+            overflow: hidden; 
+        }
+
+        #tile-1 { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-1.jpg'); background-size: cover; background-position: center; animation-delay: 0s; }
+        #tile-2 { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-2.jpg'); background-size: cover; background-position: center; animation-delay: 1s; }
+        #tile-3 { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-3.jpg'); background-size: cover; background-position: center; animation-delay: 2s; }
+        #tile-4 { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-4.jpg'); background-size: cover; background-position: center; animation-delay: 0.5s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating-tile:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+        }
+
+        .tile-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+        .tile-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.5rem; color: #111; margin: 0; letter-spacing: 1px;}
+
+        /* --- Expanded Cards (Modals) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65); 
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-content {
+            width: 85%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 24px;
+            padding: 3rem 1.5rem;
+            position: relative;
+            transform: scale(0.8) translateY(50px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            scrollbar-width: none; 
+            color: #111; 
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        #card-memories .modal-content { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-1.jpg'); background-size: cover; background-position: center; }
+        #card-letter .modal-content { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-2.jpg'); background-size: cover; background-position: center; }
+        #card-special .modal-content { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-3.jpg'); background-size: cover; background-position: center; }
+        #card-request .modal-content { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('card-bg-4.jpg'); background-size: cover; background-position: center; }
+        #card-main-photo .modal-content { background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('background.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
+        
+        .modal-content::-webkit-scrollbar { display: none; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+
+        .modal-content h2, .modal-content p, .modal-content div { color: #111; }
+
+        .modal-content h2 { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 2.8rem; 
+            margin-top: 0; 
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-content p { line-height: 1.6; font-size: 1.15rem; font-weight: 600; }
+        
+        /* Modal Base Image Style */
+        .modal-content img { 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
+            margin-bottom: 0.5rem; 
+            border: 2px solid rgba(255,255,255,0.5);
+            width: 100%; /* Ensures they fill the card beautifully */
+            object-fit: cover; /* Prevents stretching */
+        }
+
+        /* =========================================================
+           SPECIFIC IMAGE ASPECT RATIOS (Requested by User)
+           ========================================================= */
+        .img-main-modal { aspect-ratio: 3 / 4; }
+        .img-photo-1 { aspect-ratio: 1080 / 928; }
+        .img-photo-2 { aspect-ratio: 9 / 16; }
+        .img-photo-3 { aspect-ratio: 9 / 16; }
+        .img-photo-4 { aspect-ratio: 9 / 16; }
+        .img-photo-5 { aspect-ratio: 3 / 4; }
+        .img-photo-6 { aspect-ratio: 3 / 4; } 
+        .img-special { aspect-ratio: 3 / 4; }
+
+        /* Floating Animation */
+        @keyframes floatModalImage {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0); }
+        }
+        .float-img { animation: floatModalImage 4s ease-in-out infinite; }
+
+        /* --- VERTICAL PHOTO SCROLL LIST --- */
+        .photo-list { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            gap: 3rem; 
+            margin-top: 2rem; 
+            padding-bottom: 1rem;
+        }
+        .list-item { 
+            text-align: center; 
+            width: 95%; 
+        }
+        
+        .list-item p { 
+            font-size: 1.05rem; 
+            margin-top: 10px; 
+            font-weight: 600; 
+            color: #111; 
+            line-height: 1.5;
+        }
+        
+        .list-item:nth-child(1) img { animation-delay: 0s; }
+        .list-item:nth-child(2) img { animation-delay: 1s; }
+        .list-item:nth-child(3) img { animation-delay: 2s; }
+        .list-item:nth-child(4) img { animation-delay: 0.5s; }
+        .list-item:nth-child(5) img { animation-delay: 1.5s; }
+        .list-item:nth-child(6) img { animation-delay: 2.5s; }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #111;
+            z-index: 100;
+        }
+
+        .close-btn:hover { background: rgba(255,255,255,1); }
+
+        #musicBtn {
+            position: fixed; top: 15px; right: 15px; z-index: 100;
+            background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.1); padding: 10px 15px; border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer; font-weight: 600; font-family: 'Montserrat', sans-serif;
+            color: #111; backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2.8rem; }
+            .floating-tile { width: 90%; }
+            .modal-content { padding: 2.5rem 1.5rem; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthdaySong" loop><source src="birthday_song.mp3" type="audio/mpeg"></audio>
+    <button id="musicBtn" onclick="toggleMusic()">🎵 </button>
+
+    <div id="page-1">
+        <button class="btn-page-nav" onclick="goToPage2()">TAP💝</button>
+    </div>
+
+    <div id="page-2">
+        
+        <div class="back-btn-container">
+            <button class="btn-page-nav btn-back" onclick="goToPage1()">⬅ Go Back</button>
+        </div>
+
+        <div class="header">
+            <h1>HAPPY BIRTHDAY GORGEOUS!🖤</h1>
+            <p class="blended-text">
+                Wishing the happiest of birthdays to Sahithii someone who makes the world better just by being in it. You might be quiet but your huge heart and endless kindness speak volumes. It's no wonder everyone loves you so much! I hope this year brings you as much joy as you give to others. 💛🥂
+            </p>
+
+            <img src="main-photo.jpg" alt="Sahithi" class="main-photo-trigger" onclick="openCard('card-main-photo')" title="Tap me!">
+            <p style="font-size: 0.9rem; font-weight: 600; color: #111; margin-top: 8px;">(Tap the photo!)</p>
+        </div>
+
+        <div class="dashboard-container">
+            <div class="dashboard">
+                
+                <div class="floating-tile" id="tile-1" onclick="openCard('card-memories')">
+                    <span class="tile-icon">📸</span>
+                    <p class="tile-title">The Girl Who Changed My World ✨</p>
+                </div>
+
+                <div class="floating-tile" id="tile-2" onclick="openCard('card-letter')">
+                    <span class="tile-icon">💌</span>
+                    <p class="tile-title">A  Note for You</p>
+                </div>
+
+                <div class="floating-tile" id="tile-3" onclick="openCard('card-special')">
+                    <span class="tile-icon">✨</span>
+                    <p class="tile-title">Your World & Your Hero</p>
+                </div>
+
+                <div class="floating-tile" id="tile-4" onclick="openCard('card-request')">
+                    <span class="tile-icon">💖</span>
+                    <p class="tile-title">A Promise from My Heart</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="card-main-photo">
+        <div class="modal-content" style="text-align: center;">
+            <button class="close-btn" onclick="closeCard('card-main-photo')">✕</button>
+            <img src="main-photo.jpg" alt="Sahithii Main Photo" class="float-img img-main-modal" style="margin-top: 1.5rem;">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="card-memories">
+        <div class="modal-content">
+            <button class="close-btn" style="position: sticky; float: right; top: 0;" onclick="closeCard('card-memories')">✕</button>
+            
+            <h2>The Girl Who Changed My World ✨</h2>
+            <p style="text-align: center; font-style: italic;">Please forgive me for hoarding all these pictures. whenever I miss you looking at your smile is the only thing that makes my day better. I couldn't resist keeping my favorite views close to me</p>
+            
+            <div class="photo-list">
+                <div class="list-item">
+                    <img src="photo1.jpg" alt="Memory 1" class="float-img img-photo-1">
+                    <p>The very first piece of you I kept. I didn't know it when I saved this picture but I was looking at my destiny. This is where my life truly began.</p>
+                </div>
+                <div class="list-item">
+                    <img src="photo2.jpg" alt="Memory 2" class="float-img img-photo-2">
+                    <p>I could spend a thousand lifetimes just tracing the details of your face. Every single time I look at you my heart skips and I fall in love entirely all over again.</p>
+                </div>
+                <div class="list-item">
+                    <img src="photo3.jpg" alt="Memory 3" class="float-img img-photo-3">
+                    <p>An absolute goddess. You literally stepped out of my deepest dreams and into this beautiful saree. I would trade anything just to have been standing in front of you in this exact moment.</p>
+                </div>
+                <div class="list-item">
+                    <img src="photo4.jpg" alt="Memory 4" class="float-img img-photo-4">
+                    <p>Simply perfect You have the kind of warmth and goodness that makes me want to be a better man.</p>
+                </div>
+                <div class="list-item">
+                    <img src="photo5.jpg" alt="Memory 5" class="float-img img-photo-5">
+                    <p>They say eyes are the window to the soul and the moment I looked into yours I was lost forever. I couldn't hold your gaze because I was too busy surrendering my heart.</p>
+                </div>
+                <div class="list-item">
+                    <img src="photo6.jpg" alt="Memory 6" class="float-img img-photo-6">
+                    <p>In all your beautiful simplicity you became the only complication my heart will ever want. You are the missing piece I’ve been searching for my whole life and I am yours completely and endlessly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="card-letter">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCard('card-letter')">✕</button>
+            
+            <h2 style="margin-bottom: 5px;">A Little Note for You</h2>
+            <p style="text-align: center; margin-bottom: 25px; font-style: italic;">a small note for you</p>
+
+            <div style="padding: 1.5rem; border-left: 3px solid #d81b60; background: rgba(255,255,255,0.2); border-radius: 12px;">
+                <p style="margin-top: 0; margin-bottom: 15px; font-weight: 700;">Sahithii 🖤,</p>
+                <p style="margin-bottom: 15px;">I know that you are not planning to celebrate today but there was absolutely no way I could let your 18th birthday pass without trying to bring a little smile to that beautiful face of yours reaching out today wasn't just a choice it was something my heart completely insisted on doing</p>
+                <p style="margin-bottom: 15px;">Before I say anything else I want to give you the most sincere gentle apology from the bottom of my heart I am so incredibly sorry for my words hurting our bond is my biggest regret and my only wish right now is that the awkwardness fades away and we can just go back to being our normal comfortable selves again</p>
+                <p style="margin-bottom: 15px;">Ever since the very first day we met my mind has safely kept every single little detail about you I know you carry some quiet struggles but you also carry so much magic the pure beautiful way you love your dad more than anyone else in the whole world is honestly the sweetest thing I’ve ever seen and it shows just how precious your heart is</p>
+                <p style="margin-bottom: 15px;">You are such a breathtakingly rare girl you effortlessly make everything brighter simply by existing! I used to be such a gloomy overthinker, but your warmth, your comforting voice, and the fierce way you stand up for the people you care about completely melted my walls. You naturally drew me in, sprinkled so much positivity into my world, and made my days feel perfectly complete.</p>
+                <p style="margin-bottom: 15px;">I know you might never feel the same way about me, and honestly, I accept that with my whole heart. I just want you to know that I am here for you, always. Whether you're having your brightest, happiest day or a really tough one where you just need someone to be there, I am ready to be in your corner through it all.</p>
+                <p style="margin-bottom: 15px;">I actually had these big, completely different plans for your 18th birthday! But since we are so far apart, and because I wanted to patiently wait for you to share your address with me yourself (instead of secretly asking your friends!), I had to get a little creative to celebrate you.</p>
+                <p style="margin-bottom: 15px;">So... I built this little digital space just for you! Thinking about you actually motivated me to sit down and learn how to write all the code to build this website entirely from scratch. Going on a top-secret mission to gather your photos from your friends was so much fun, and I poured all my heart into making this screen come alive. It might be a silly little gesture, but this whole website is a tiny world I created just for you.</p>
+                <p style="margin-bottom: 15px;">I am so endlessly lucky that the universe let me meet you, and I will love you for as long as I live.</p>
+                <p style="margin-bottom: 0; font-weight: 700;">Happy 18th Birthday, Sahithii! ❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="card-special">
+        <div class="modal-content" style="text-align: center;">
+            <button class="close-btn" onclick="closeCard('card-special')">✕</button>
+            
+            <h2>Your World & Your Hero</h2>
+            <p style="font-style: italic; margin-bottom: 20px;">I don't know what to caption this, but I just wanted to keep it here</p>
+
+            <img src="special-photo.jpg" alt="Special Memory" class="float-img img-special">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="card-request">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCard('card-request')">✕</button>
+            
+            <h2 style="margin-bottom: 20px;">A Promise from My Heart</h2>
+
+            <div style="padding: 1.5rem; border: 2px solid rgba(255,255,255,0.6); border-radius: 15px; background: rgba(255,255,255,0.1);">
+                <p style="margin-top: 0; margin-bottom: 15px;">Please never, ever feel alone in this world I am always right here for you anytime you need me I am completely yours to rely on.</p>
+                <p style="margin-bottom: 15px;">Honestly if you forget all about me during your happiest brightest days that is completely okay! But please promise me you won't forget me on your bad days. I would feel like the luckiest person in the world just to be the one you turn to when you need a hand to hold.</p>
+                <p style="margin-bottom: 0;">You have such a beautifully precious life ahead of you Sahithii. Please live it to the absolute fullest and never waste a single drop of that magic💖</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Page Navigation Logic ---
+        function goToPage2() {
+            document.getElementById('page-1').style.display = 'none';
+            document.getElementById('page-2').style.display = 'block';
+            window.scrollTo(0, 0); 
+            
+            confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+
+            // Automatically start the music and update the icon!
+            const audio = document.getElementById("birthdaySong");
+            const btn = document.getElementById("musicBtn");
+            audio.play().catch(error => console.log("Autoplay prevented by browser:", error));
+            btn.innerHTML = "⏸️";
+        }
+
+        function goToPage1() {
+            document.getElementById('page-2').style.display = 'none';
+            document.getElementById('page-1').style.display = 'flex';
+            window.scrollTo(0, 0); 
+        }
+
+        // --- Music ---
+        function toggleMusic() {
+            const audio = document.getElementById("birthdaySong");
+            const btn = document.getElementById("musicBtn");
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "⏸️";
+            } else {
+                audio.pause();
+                btn.innerHTML = "🎵 ";
+            }
+        }
+
+        // --- Card Modals ---
+        function openCard(cardId) {
+            const modal = document.getElementById(cardId);
+            modal.classList.add('active');
+            
+            const content = modal.querySelector('.modal-content');
+            if(content) { content.scrollTop = 0; }
+
+            confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+        }
+
+        function closeCard(cardId) {
+            document.getElementById(cardId).classList.remove('active');
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
